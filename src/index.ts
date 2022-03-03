@@ -42,9 +42,13 @@ export class UntappdStrategy<User> extends OAuth2Strategy<User, OAuth2Profile> {
       },
       verify
     );
+    (this as any).fetchAccessToken = this.fetchAccessTokenOverride;
   }
 
-  async fetchAccessToken(code: string, params: URLSearchParams) {
+  protected async fetchAccessTokenOverride(
+    code: string,
+    params: URLSearchParams
+  ) {
     debugger;
     params.set("client_id", this.clientID);
     params.set("client_secret", this.clientSecret);
