@@ -65,7 +65,7 @@ export class UntappdStrategy<User> extends OAuth2Strategy<User, OAuth2Profile> {
     let response = await fetch(url.toString(), {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params, // Send them as body params too, though not scrictly required
+      body: params, // Send them as body params too, though not strictly required
     });
 
     if (!response.ok) {
