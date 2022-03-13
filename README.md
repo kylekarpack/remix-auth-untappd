@@ -9,19 +9,19 @@ Use Untappd as an OAuth2 identity provider in Remix
 | Node.js    | ✅          |
 | Cloudflare | Not tested  |
 
-
 ## How to use
 
-1. Get an Untappd API key: https://untappd.com/api/register?register=new
-2. Put secrets in your `.env` file
-3. Use the UntappedStrategy in your code: 
+1. Install: `npm i remix-auth-untappd`
+2. Get an Untappd API application: https://untappd.com/api/register?register=new
+3. Put the secrets in your `.env` file
+4. Use the UntappedStrategy in your code: 
    ```typescript
    import { UntappdStrategy } from "remix-auth-untappd";
 
    const untappdStrategy = new UntappdStrategy {
-      clientID: process.env.OAUTH2_UNTAPPD_ID!,
-      clientSecret: process.env.OAUTH2_UNTAPPD_SECRET!,
-      callbackURL: process.env.OAUTH2_UNTAPPD_CALLBACK_URL!,
+      clientID: process.env.UNTAPPD_ID!,
+      clientSecret: process.env.UNTAPPD_SECRET!,
+      callbackURL: "http://localhost:3000/auth/untappd", // Or whatever you're using
    }, ({ profile, accessToken }) => {
       // Do something with the profile and/or token
    });
