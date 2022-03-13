@@ -80,14 +80,13 @@ export class UntappdStrategy<User> extends OAuth2Strategy<User, OAuth2Profile> {
   }
 
   protected async userProfile(accessToken: string): Promise<OAuth2Profile> {
-    let response = await fetch(this.userProfileUrl, {
+    const response = await fetch(this.userProfileUrl, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    let json: UntappdUserResponse = await response.json();
+    const json: UntappdUserResponse = await response.json();
     const data = json.response.user;
-    debugger;
-    let profile: OAuth2Profile = {
+    const profile: OAuth2Profile = {
       provider: "untappd",
       displayName: data.user_name,
       id: data.user_name,
