@@ -1,4 +1,4 @@
-# Strategy Name
+# remix-auth-untappd
 
 Use Untappd as an OAuth2 identity provider in Remix
 
@@ -16,7 +16,18 @@ Use Untappd as an OAuth2 identity provider in Remix
 2. Put secrets in your `.env` file
 3. Use the UntappedStrategy in your code: 
    ```typescript
-   // ToDo: Add example
+   import { UntappdStrategy } from "remix-auth-untappd";
+
+   const untappdStrategy = new UntappdStrategy {
+      clientID: process.env.OAUTH2_UNTAPPD_ID!,
+      clientSecret: process.env.OAUTH2_UNTAPPD_SECRET!,
+      callbackURL: process.env.OAUTH2_UNTAPPD_CALLBACK_URL!,
+   }, ({ profile, accessToken }) => {
+      // Do something with the profile and/or token
+   });
+
+   // Once you have an "authenticator" object:
+   authenticator.use(untappdStrategy);
    ```
 
 ## Development
