@@ -42,14 +42,16 @@ export class UntappdStrategy<User> extends OAuth2Strategy<User, OAuth2Profile> {
       },
       verify
     );
+
+    // Hack to override the private fetchAccessToken method in the parent class
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this as any).fetchAccessToken = this.fetchAccessTokenOverride;
   }
 
-  protected async fetchAccessTokenOverride(
+  private async fetchAccessTokenOverride(
     code: string,
     params: URLSearchParams
   ) {
-    debugger;
     params.set("client_id", this.clientID);
     params.set("client_secret", this.clientSecret);
     if (params.get("grant_type") === "refresh_token") {
@@ -57,26 +59,24 @@ export class UntappdStrategy<User> extends OAuth2Strategy<User, OAuth2Profile> {
     } else {
       params.set("code", code);
     }
-
     // Add all parameters as query parameters, as required by Untappd
     const url = new URL(this.tokenURL);
-    for (const [k, v] of params.entries()) {
-      url.searchParams.append(k, v);
-    }
+    url.search = params.toString();
     let response = await fetch(url.toString(), {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params, // Send them as body params too, though not scrictly required
     });
 
     if (!response.ok) {
       try {
         let body = await response.text();
         throw new Response(body, { status: 401 });
-      } catch (error: any) {
-        throw new Response(error.message, { status: 401 });
+      } catch (error) {
+        throw new Response((error as Error).message, { status: 401 });
       }
     }
-    return await this.getAccessToken(response.clone());
+    return await this.getAccessToken(response.clone() as Response);
   }
 
   protected async userProfile(accessToken: string): Promise<OAuth2Profile> {
