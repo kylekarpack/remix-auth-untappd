@@ -49,7 +49,7 @@ export interface MediaItems {
   user: ItemsUser;
   beer: Beer;
   brewery: Brewery;
-  venue: any[];
+  venue: unknown[];
 }
 
 export interface Beer {
